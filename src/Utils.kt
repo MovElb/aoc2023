@@ -19,3 +19,20 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  * The cleaner shorthand for printing output.
  */
 fun Any?.println() = println(this)
+
+fun Boolean.toInt() = if (this) 1 else 0
+
+fun gcd(x: Long, y: Long): Long {
+    var x = x
+    var y = y
+    while (y != 0L) {
+        val prevB = y
+        y = x % y
+        x = prevB
+    }
+    return x
+}
+
+fun lcm(x: Long, y: Long): Long {
+    return x / gcd(x, y) * y
+}
