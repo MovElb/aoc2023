@@ -22,6 +22,13 @@ fun Any?.println() = println(this)
 
 fun Boolean.toInt() = if (this) 1 else 0
 
+operator fun Pair<Int, Int>.plus(o: Pair<Int, Int>): Pair<Int, Int> {
+    return first + o.first to second + o.second
+}
+operator fun Pair<Int, Int>.minus(o: Pair<Int, Int>): Pair<Int, Int> {
+    return first - o.first to second - o.second
+}
+
 fun gcd(x: Long, y: Long): Long {
     var x = x
     var y = y
