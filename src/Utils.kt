@@ -2,6 +2,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
+import kotlin.math.abs
 
 /**
  * Reads lines from the given input txt file.
@@ -27,6 +28,10 @@ operator fun Pair<Int, Int>.plus(o: Pair<Int, Int>): Pair<Int, Int> {
 }
 operator fun Pair<Int, Int>.minus(o: Pair<Int, Int>): Pair<Int, Int> {
     return first - o.first to second - o.second
+}
+
+fun manhattanDistance(x: Pair<Long, Long>, y: Pair<Long, Long>): Long {
+    return abs(x.first - y.first) + abs(x.second - y.second)
 }
 
 fun gcd(x: Long, y: Long): Long {
