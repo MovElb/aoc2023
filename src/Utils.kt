@@ -29,9 +29,54 @@ operator fun Pair<Int, Int>.plus(o: Pair<Int, Int>): Pair<Int, Int> {
 operator fun Pair<Int, Int>.minus(o: Pair<Int, Int>): Pair<Int, Int> {
     return first - o.first to second - o.second
 }
+fun IntRange.size(): Int {
+    return (last - first + 1).coerceAtLeast(0)
+}
 
 fun manhattanDistance(x: Pair<Long, Long>, y: Pair<Long, Long>): Long {
     return abs(x.first - y.first) + abs(x.second - y.second)
+}
+
+fun String.addCharAtIndex(char: Char, index: Int) =
+    StringBuilder(this).apply { insert(index, char) }.toString()
+
+inline fun <T> Iterable<T>.split(predicate: (T) -> Boolean): List<List<T>> {
+    if (none()) return emptyList()
+    val lists = mutableListOf<MutableList<T>>(mutableListOf())
+    for (item in this) {
+        if (predicate(item)) {
+            lists += mutableListOf<T>()
+        } else {
+            lists.last() += item
+        }
+    }
+    return lists
+}
+
+fun <T> List<T>.lowerBound(fromIndex: Int = 0, toIndex: Int = size, comparison: (T) -> Int): Int {
+    return binarySearch(fromIndex, toIndex, comparison).let {
+        if (it < 0) {
+            return@let it
+        }
+        var x = it
+        while (x - 1 >= 0 && comparison(this[x - 1]) == 0) {
+            --x
+        }
+        x
+    }
+}
+
+fun <T> List<T>.upperBound(fromIndex: Int = 0, toIndex: Int = size, comparison: (T) -> Int): Int {
+    return binarySearch(fromIndex, toIndex, comparison).let {
+        if (it < 0) {
+            return@let it
+        }
+        var x = it
+        while (x + 1 < toIndex && comparison(this[x + 1]) == 0) {
+            ++x
+        }
+        x
+    }
 }
 
 fun gcd(x: Long, y: Long): Long {
