@@ -79,6 +79,20 @@ fun <T> List<T>.upperBound(fromIndex: Int = 0, toIndex: Int = size, comparison: 
     }
 }
 
+fun <T> Iterable<Iterable<T>>.transpose(): List<List<T>> {
+    val lists = mutableListOf<MutableList<T>>()
+    forEachIndexed { i, it ->
+        it.forEachIndexed { j, v ->
+            if (lists.size <= j) {
+                lists.add(mutableListOf())
+            }
+            lists[j].add(v)
+        }
+    }
+    check(lists.isEmpty() || lists.all { it.size == lists.first().size })
+    return lists
+}
+
 fun gcd(x: Long, y: Long): Long {
     var x = x
     var y = y
