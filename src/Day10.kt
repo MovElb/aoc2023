@@ -1,13 +1,5 @@
 import kotlin.math.absoluteValue
 
-private enum class Direction(val repr: Pair<Int, Int>) {
-    UP(-1 to 0),
-    DOWN(1 to 0),
-    LEFT(0 to -1),
-    RIGHT(0 to 1),
-    ;
-}
-
 private enum class PipeType(val repr: Char, val dirs: List<Direction>) {
     VERTICAL('|', listOf(Direction.UP, Direction.DOWN).sorted()),
     HORIZONTAL('-', listOf(Direction.LEFT, Direction.RIGHT).sorted()),

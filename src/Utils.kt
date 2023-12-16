@@ -107,3 +107,30 @@ fun gcd(x: Long, y: Long): Long {
 fun lcm(x: Long, y: Long): Long {
     return x / gcd(x, y) * y
 }
+
+typealias Point = Pair<Int, Int>
+
+enum class Direction(val repr: Pair<Int, Int>) {
+    UP(-1 to 0),
+    DOWN(1 to 0),
+    LEFT(0 to -1),
+    RIGHT(0 to 1),
+    ;
+
+    fun inverse(): Direction {
+        return when (this) {
+            UP -> DOWN
+            DOWN -> UP
+            LEFT -> RIGHT
+            RIGHT -> LEFT
+        }
+    }
+
+    fun isHorizontal(): Boolean {
+        return this in listOf(Direction.LEFT, Direction.RIGHT)
+    }
+
+    fun isVertical(): Boolean {
+        return !isHorizontal()
+    }
+}
