@@ -36,6 +36,9 @@ fun IntRange.size(): Int {
 fun manhattanDistance(x: Pair<Long, Long>, y: Pair<Long, Long>): Long {
     return abs(x.first - y.first) + abs(x.second - y.second)
 }
+fun manhattanDistance(x: Pair<Int, Int>, y: Pair<Int, Int>): Int {
+    return abs(x.first - y.first) + abs(x.second - y.second)
+}
 
 fun String.addCharAtIndex(char: Char, index: Int) =
     StringBuilder(this).apply { insert(index, char) }.toString()
