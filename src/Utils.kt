@@ -3,6 +3,7 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
 import kotlin.math.abs
+import kotlin.reflect.KClass
 
 /**
  * Reads lines from the given input txt file.
@@ -23,12 +24,70 @@ fun Any?.println() = println(this)
 
 fun Boolean.toInt() = if (this) 1 else 0
 
-operator fun Pair<Int, Int>.plus(o: Pair<Int, Int>): Pair<Int, Int> {
+@Suppress("UNCHECKED_CAST")
+inline fun <reified From, To> Pair<From, From>.cast(to: KClass<To>): Pair<To, To> where From : Number, To : Number {
+    if (From::class == to) {
+        return (this.first as To) to (this.second as To)
+    }
+
+    return when (to) {
+        Byte::class -> return (first.toByte() as To) to (second.toByte() as To)
+        Short::class -> return (first.toShort() as To) to (second.toShort() as To)
+        Int::class -> return (first.toInt() as To) to (second.toInt() as To)
+        Long::class -> return (first.toLong() as To) to (second.toLong() as To)
+        Float::class -> return (first.toFloat() as To) to (second.toFloat() as To)
+        Double::class -> return (first.toDouble() as To) to (second.toDouble() as To)
+        else -> error("Unsupported type ${to.qualifiedName}")
+    }
+}
+
+inline fun <reified From, reified To> Pair<From, From>.cast(): Pair<To, To> where From : Number, To : Number {
+    return cast(To::class)
+}
+inline operator fun <reified T> T.plus(o: T): T where T : Number {
+    return when (this) {
+        is Byte -> this + o as Byte
+        is Short -> this + o as Short
+        is Int -> this + o as Int
+        is Long -> this + o as Long
+        is Float -> this + o as Float
+        is Double -> this + o as Double
+        else -> error("Unsupported type")
+    } as T
+}
+inline operator fun <reified T> T.times(o: T): T where T : Number {
+    return when (this) {
+        is Byte -> this * o as Byte
+        is Short -> this * o as Short
+        is Int -> this * o as Int
+        is Long -> this * o as Long
+        is Float -> this * o as Float
+        is Double -> this * o as Double
+        else -> error("Unsupported type")
+    } as T
+}
+inline operator fun <reified T> T.unaryMinus(): T where T : Number {
+    return when (this) {
+        is Byte -> -this
+        is Short -> -this
+        is Int -> -this
+        is Long -> -this
+        is Float -> -this
+        is Double -> -this
+        else -> error("Unsupported type")
+    } as T
+}
+
+inline operator fun <reified T> Pair<T, T>.plus(o: Pair<T, T>): Pair<T, T> where T : Number {
     return first + o.first to second + o.second
 }
-operator fun Pair<Int, Int>.minus(o: Pair<Int, Int>): Pair<Int, Int> {
-    return first - o.first to second - o.second
+inline operator fun <reified T> Pair<T, T>.minus(o: Pair<T, T>): Pair<T, T> where T : Number {
+    return first + (-o.first) to second + (-o.second)
 }
+inline operator fun <reified T> Pair<T, T>.times(o: T): Pair<T, T> where T : Number {
+    return first * o to second * o
+}
+
 fun IntRange.size(): Int {
     return (last - first + 1).coerceAtLeast(0)
 }
@@ -135,5 +194,17 @@ enum class Direction(val repr: Pair<Int, Int>) {
 
     fun isVertical(): Boolean {
         return !isHorizontal()
+    }
+
+    companion object {
+        fun parseFromShortName(name: String): Direction {
+            return when(name.lowercase()) {
+                "u" -> UP
+                "d" -> DOWN
+                "l" -> LEFT
+                "r" -> RIGHT
+                else -> error("Invalid name $name for Direction")
+            }
+        }
     }
 }
